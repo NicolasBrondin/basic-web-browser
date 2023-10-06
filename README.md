@@ -24,8 +24,8 @@ npm start
 ## Roadmap
 
 - [x] Display a window
-- [] Send an http request
-- [] Display web page title
+- [ ] Send an http request
+- [ ] Display web page title
 
 ## License
 
