@@ -23,9 +23,10 @@ npm start
 
 ## Roadmap
 
-[x] Display a window
-[] Send an http request
-[] Display web page title
+- [x] Display a window
+- [] Send an http request
+- [] Display web page title
+
 ## License
 
 MIT
