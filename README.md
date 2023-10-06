@@ -25,7 +25,9 @@ npm start
 
 - [x] Display a window
 - [x] Send an http request
-- [ ] Parse and display web page title
+- [x] Parse and display web page title
+- [ ] Make HtmlParser case insensitive
+- [ ] Make HtmlParser to parse siblings
 
 ## License
 

@@ -7,8 +7,11 @@ import {
   QLineEdit
 } from '@nodegui/nodegui';
 import { RequestHandler } from './RequestHandler';
+import { HtmlParser } from './HtmlParser';
+import { json } from 'stream/consumers';
 
 const requestHandler = new RequestHandler();
+const htmlParser = new HtmlParser();
 
 const win = new QMainWindow();
 win.setWindowTitle("Basic Web Browser");
@@ -29,7 +32,12 @@ button.setText("Go");
 
 async function loadPage(url: string){
   const page = await requestHandler.requestUrl(url);
-  console.log(page);
+  const dom = htmlParser.parseHtmlDocumentFromText(page.content);
+  const titleEl = dom.findNodeByName("TITLE");
+  console.log(titleEl);
+  if(titleEl){
+    win.setWindowTitle(titleEl.value as string);
+  }
 }
 
 button.addEventListener('clicked', async () => {
