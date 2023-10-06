@@ -1,8 +1,14 @@
-import { QMainWindow, QWidget, QLabel, FlexLayout, QPushButton, QLineEdit } from '@nodegui/nodegui';
-
+import {
+  QMainWindow,
+  QWidget,
+  QLabel,
+  FlexLayout,
+  QPushButton,
+  QLineEdit
+} from '@nodegui/nodegui';
 
 const win = new QMainWindow();
-win.setWindowTitle("Hello World");
+win.setWindowTitle("Basic Web Browser");
 win.setFixedWidth(800);
 win.setFixedHeight(600);
 
@@ -16,6 +22,7 @@ label.setObjectName("mylabel");
 label.setText("Enter a url");
 
 const button = new QPushButton();
+button.setText("Go");
 
 async function loadPage(url: string){
   
@@ -25,8 +32,6 @@ button.addEventListener('clicked', async () => {
   console.log("[REQUEST]"+textEdit.text());
   await loadPage(textEdit.text());
 });
-//button.setIcon(new QIcon(logo));
-button.setText("Go");
 
 const textEdit = new QLineEdit();
 textEdit.setText("http://info.cern.ch/hypertext/WWW/TheProject.html");
