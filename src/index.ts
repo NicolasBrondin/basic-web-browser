@@ -6,6 +6,9 @@ import {
   QPushButton,
   QLineEdit
 } from '@nodegui/nodegui';
+import { RequestHandler } from './RequestHandler';
+
+const requestHandler = new RequestHandler();
 
 const win = new QMainWindow();
 win.setWindowTitle("Basic Web Browser");
@@ -25,11 +28,11 @@ const button = new QPushButton();
 button.setText("Go");
 
 async function loadPage(url: string){
-  
+  const page = await requestHandler.requestUrl(url);
+  console.log(page);
 }
 
 button.addEventListener('clicked', async () => {
-  console.log("[REQUEST]"+textEdit.text());
   await loadPage(textEdit.text());
 });
 
