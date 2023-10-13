@@ -29,7 +29,7 @@ npm start
 - [x] Make HtmlParser case insensitive
 - [x] Make HtmlParser to parse siblings
 - [ ] Parse single elements
-- [ ] Handle non-closed elements (<DT>, <DL>, <BR>)
+- [ ] Handle non-closed elements (DT, DL, BR)
 - [ ] Parse elements attributes like "href"
 - [ ] Parse non html elements as text nodes
 
