@@ -5,26 +5,30 @@ export class HtmlParser {
     parseHtmlDocumentFromText(html: string) : DomTree {
         const dom = new DomTree();
         const document = dom.document;
-        dom.document.innerHTML = html;
-        let currentNode = document;
-        while(currentNode.innerHTML){
-            try {
-            const node = this.parseDomNodeFromText(currentNode.innerHTML);
-            currentNode.addNode(node);
-            currentNode = node;
-            } catch (error) {
-                console.log(error);
-                break;
-            }
-        }
+        document.innerHTML = html;
+        this.parseChildrenDomNodes(document);
+        console.log(JSON.stringify(dom,null, 4));
         return dom;
     }
-    parseDomNodeFromText(text: string) : DomNode {
-        const regex = /<(.+)>(.*)<\/\1>/;
-        const result = regex.exec(text.replace(/[\n\r]/g, ''));
-        if(!result){
-            throw new Error("Invalid html tag");
+    parseChildrenDomNodes(node: DomNode) {
+        if(!node.innerHTML){
+            return [];
         }
-        return new DomNode(result[1], result[2], result[2]);
+        node.innerHTML = node.innerHTML.trim();
+        const regex = /<(.+)>(.*)<\/\1>/gmsi;
+        const groups = node.innerHTML.match(regex);
+        groups?.forEach((nodeRaw) => {
+            regex.lastIndex = 0; //https://stackoverflow.com/questions/38910334/regular-expression-exec-function-does-not-work-multiple-times
+            const parsedNode = regex.exec(nodeRaw);
+            if(parsedNode){
+                const [_, el, content] = parsedNode;
+                const newNode = new DomNode(el, null, content);
+                node.addChildNode(newNode);
+                this.parseChildrenDomNodes(newNode);
+            }
+        });
+        if(!groups){
+            node.value = node.innerHTML;
+        }
     }
 }

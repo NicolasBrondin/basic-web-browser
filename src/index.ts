@@ -32,9 +32,9 @@ button.setText("Go");
 
 async function loadPage(url: string){
   const page = await requestHandler.requestUrl(url);
+  //const test = "<html><head><title>Test</title></head><body><h1>Test</h1><p>Test</p></body></html>";
   const dom = htmlParser.parseHtmlDocumentFromText(page.content);
-  const titleEl = dom.findNodeByName("TITLE");
-  console.log(titleEl);
+  const titleEl = dom.findNodeByName("title");
   if(titleEl){
     win.setWindowTitle(titleEl.value as string);
   }

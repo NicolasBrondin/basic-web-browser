@@ -1,16 +1,16 @@
 export class DomNode {
     name: string = "";
     children: DomNode[] = [];
-    value?: string;
+    value: string | null = null;
     innerHTML?: string;
 
-    constructor(name: string, value?: string, innerHTML?: string) {
-        this.name = name;
+    constructor(name: string, value: string|null, innerHTML?: string) {
+        this.name = name.toLowerCase();
         this.value = value;
         this.innerHTML = innerHTML;
     }
 
-    addNode(node: DomNode) {
+    addChildNode(node: DomNode) {
         this.children.push(node);
     }
 }
