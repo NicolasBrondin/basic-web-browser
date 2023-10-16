@@ -22,10 +22,37 @@ const centralWidget = new QWidget();
 centralWidget.setObjectName("myroot");
 const rootLayout = new FlexLayout();
 centralWidget.setLayout(rootLayout);
-
-const label = new QLabel();
+const pageWidget = new QWidget();
+pageWidget.setObjectName("mypage");
+const pageLayout = new FlexLayout();
+pageWidget.setLayout(pageLayout);
+const headerWidget = new QWidget();
+headerWidget.setObjectName("myheader");
+const headerLayout = new FlexLayout();
+headerWidget.setLayout(headerLayout);
+centralWidget.setStyleSheet(`
+#myroot {
+  
+  flex: '1';
+  height: '100%';
+  width: '100%';
+  align-items: 'stretch';
+}
+#myheader {
+  flex-direction: 'row';
+  
+}
+#mytextedit{
+  flex: '1';
+}
+#mypage{
+  flex: '1';
+  background-color: 'white';
+}
+`);
+/*const label = new QLabel();
 label.setObjectName("mylabel");
-label.setText("Enter a url");
+label.setText("Enter a url");*/
 
 const button = new QPushButton();
 button.setText("Go");
@@ -35,8 +62,14 @@ async function loadPage(url: string){
   //const test = "<html><head><title>Test</title></head><body><h1>Test</h1><p>Test</p></body></html>";
   const dom = htmlParser.parseHtmlDocumentFromText(page.content);
   const titleEl = dom.findNodeByName("title");
+  const h1 = dom.findNodeByName("h1");
   if(titleEl){
     win.setWindowTitle(titleEl.value as string);
+  }
+  if(h1){
+    const label = new QLabel();
+    label.setText(h1.value as string);
+    pageLayout.addWidget(label);
   }
 }
 
@@ -45,11 +78,14 @@ button.addEventListener('clicked', async () => {
 });
 
 const textEdit = new QLineEdit();
+textEdit.setObjectName("mytextedit");
 textEdit.setText("http://info.cern.ch/hypertext/WWW/TheProject.html");
 
-rootLayout.addWidget(label);
-rootLayout.addWidget(textEdit);
-rootLayout.addWidget(button);
+//headerLayout.addWidget(label);
+rootLayout.addWidget(headerWidget);
+rootLayout.addWidget(pageWidget);
+headerLayout.addWidget(textEdit);
+headerLayout.addWidget(button);
 win.setCentralWidget(centralWidget);
 win.setStyleSheet(
   `
