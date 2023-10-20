@@ -28,6 +28,7 @@ npm start
 - [x] Parse and display web page title
 - [x] Make HtmlParser case insensitive
 - [x] Make HtmlParser to parse siblings
+- [x] Start rendering elements on the page
 - [ ] Parse single elements
 - [ ] Handle non-closed elements (DT, DL, BR)
 - [ ] Parse elements attributes like "href"

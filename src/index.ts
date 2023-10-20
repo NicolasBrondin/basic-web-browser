@@ -9,6 +9,7 @@ import {
 import { RequestHandler } from './RequestHandler';
 import { HtmlParser } from './HtmlParser';
 import { json } from 'stream/consumers';
+import { HtmlRenderer } from './HtmlRenderer';
 
 const requestHandler = new RequestHandler();
 const htmlParser = new HtmlParser();
@@ -26,6 +27,7 @@ const pageWidget = new QWidget();
 pageWidget.setObjectName("mypage");
 const pageLayout = new FlexLayout();
 pageWidget.setLayout(pageLayout);
+(pageWidget as any).xLayout = pageLayout;
 const headerWidget = new QWidget();
 headerWidget.setObjectName("myheader");
 const headerLayout = new FlexLayout();
@@ -54,6 +56,9 @@ centralWidget.setStyleSheet(`
 label.setObjectName("mylabel");
 label.setText("Enter a url");*/
 
+
+const htmlRenderer = new HtmlRenderer(pageWidget);
+
 const button = new QPushButton();
 button.setText("Go");
 
@@ -61,16 +66,17 @@ async function loadPage(url: string){
   const page = await requestHandler.requestUrl(url);
   //const test = "<html><head><title>Test</title></head><body><h1>Test</h1><p>Test</p></body></html>";
   const dom = htmlParser.parseHtmlDocumentFromText(page.content);
-  const titleEl = dom.findNodeByName("title");
-  const h1 = dom.findNodeByName("h1");
+  const titleEl = dom.document.findNodeByName("title");
   if(titleEl){
     win.setWindowTitle(titleEl.value as string);
   }
-  if(h1){
+  htmlRenderer.render(dom);
+  /*if(h1){
     const label = new QLabel();
     label.setText(h1.value as string);
     pageLayout.addWidget(label);
-  }
+  }*/
+
 }
 
 button.addEventListener('clicked', async () => {

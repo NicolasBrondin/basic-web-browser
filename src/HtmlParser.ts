@@ -1,5 +1,6 @@
 import { DomNode } from "./DomNode";
 import { DomTree } from "./DomTree";
+import HtmlHeadNode from "./HtmlNodes/HtmlHeadNode";
 
 export class HtmlParser {
     parseHtmlDocumentFromText(html: string) : DomTree {
@@ -7,7 +8,7 @@ export class HtmlParser {
         const document = dom.document;
         document.innerHTML = html;
         this.parseChildrenDomNodes(document);
-        console.log(JSON.stringify(dom,null, 4));
+        //console.log(JSON.stringify(dom,null, 4));
         return dom;
     }
     parseChildrenDomNodes(node: DomNode) {
@@ -22,7 +23,13 @@ export class HtmlParser {
             const parsedNode = regex.exec(nodeRaw);
             if(parsedNode){
                 const [_, el, content] = parsedNode;
-                const newNode = new DomNode(el, null, content);
+
+                let newNode;
+                if(el.toLowerCase() == "head" || el.toLowerCase() == "header"){
+                    newNode = new HtmlHeadNode(el, null, content);
+                } else {
+                    newNode = new DomNode(el, null, content);
+                }
                 node.addChildNode(newNode);
                 this.parseChildrenDomNodes(newNode);
             }
