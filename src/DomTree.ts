@@ -1,8 +1,9 @@
 import { DomNode } from "./DomNode";
 
 export class DomTree {
-    document: DomNode = new DomNode("html", null);
-    constructor() {
+    document?: DomNode;
+    constructor(document?: DomNode) {
+        this.document = document;
     }
 
 }

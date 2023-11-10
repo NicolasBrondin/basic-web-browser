@@ -1,39 +1,27 @@
 import { FlexLayout, QLabel, QWidget } from "@nodegui/nodegui";
-
+import { HTMLElement, Node, TextNode } from "node-html-parser";
 export class DomNode {
-    name: string = "";
-    children: DomNode[] = [];
-    value: string | null = null;
-    innerHTML?: string;
-    attributes: {[key: string]: any} = {
-        style: {
-            display: "block",
-        }
-    };
+    
+    element: Node;
 
-    constructor(name: string, value: string|null, innerHTML?: string) {
-        this.name = name.toLowerCase();
-        this.value = value;
-        this.innerHTML = innerHTML;
+    constructor(el: Node){
+        this.element = el;
     }
-
     addChildNode(node: DomNode) {
-        this.children.push(node);
+        this.element.childNodes.push(node.element);
     }
     
     findNodeByName(name: string) : DomNode | undefined {
-        for (const child of this.children) {
-            if(child.name == name){
-                return child;
+        for (const child of this.element.childNodes) {
+            const domNode = new DomNode(child as HTMLElement);
+            if((domNode.element as HTMLElement).tagName == name){
+                return domNode;
             }
         }
-        for (const child of this.children) {
-            if(child.name == name){
-                return child;
-            }
-        }
-        for (const child of this.children)
-        {   const el = child.findNodeByName(name);
+        for (const child of this.element.childNodes)
+        {
+            const domNode = new DomNode(child as HTMLElement);
+            const el = domNode.findNodeByName(name);
             
             if(el){
                 return el;
@@ -43,23 +31,27 @@ export class DomNode {
 
     render(): QWidget{
         const widget = new QWidget();
+        widget.setObjectName("widget");
         const layout = new FlexLayout();
         widget.setLayout(layout);
         (widget as any).xLayout = layout;
 
-        if(this.value){
+        if(this.element instanceof TextNode){
             const label = new QLabel();
-            label.setText(this.value);
+            label.setText(this.element.textContent);
             layout.addWidget(label);
         }
-
-        if(this.attributes.style.display == "none"){
+        /*widget.setStyleSheet(`#widget {
+            border: 1px solid red;
+            padding: 5px;
+        }`);*/
+        /*if(this.attributes.style.display == "none"){
             widget.hide();
         }
         if(this.attributes.style.height){
             // Doesn't work, still taking space
             widget.setFixedHeight(parseInt(this.attributes.style.height, 10));
-        }
+        }*/
 
         return widget;
     }

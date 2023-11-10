@@ -1,6 +1,7 @@
 import { FlexLayout, QLabel, QLayout, QWidget } from "@nodegui/nodegui";
 import { DomTree } from "./DomTree";
 import { DomNode } from "./DomNode";
+import { HTMLElement} from "node-html-parser";
 
 export class HtmlRenderer {
     rootWidget?: QWidget;
@@ -18,11 +19,11 @@ export class HtmlRenderer {
         this.renderDomNode(this.rootWidget, this.domTree.document);
     }
 
-    renderDomNode(parentWidget: QWidget, node: DomNode) {
+    renderDomNode(parentWidget: QWidget, node?: DomNode) {
         if(!node){
             return;
         }
-        console.log(`[RENDERER] Rendering node ${node.name}`);
+        console.log(`[RENDERER] Rendering node ${(node.element as HTMLElement).tagName}`);
         const widget = node.render();
         if(!widget){
             return;
@@ -34,7 +35,8 @@ export class HtmlRenderer {
         }
 
         
-        node.children.forEach((childNode) => {
+        node.element.childNodes.forEach((el) => {
+            const childNode = new DomNode(el);
             this.renderDomNode(widget, childNode);
         });
 
