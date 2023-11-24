@@ -4,6 +4,7 @@ import { PageResponse } from "../types/PageResponse";
 const http = require('http');
 
 export class RequestHandler {
+    history: string[] = [];
     currentPath?: string;
     constructor() {
     }
@@ -32,6 +33,10 @@ export class RequestHandler {
         }
         return absoluteLink;*/
 
+    }
+
+    getHistory(){
+        return this.history;
     }
 
     getCurrentDomain(){

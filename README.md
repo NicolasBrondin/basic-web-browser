@@ -31,6 +31,7 @@ npm start
 - [x] Start rendering elements on the page
 - [x] Parse single elements
 - [x] Make links clickable
+- [ ] Previous button
 
 ## License
 

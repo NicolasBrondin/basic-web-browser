@@ -24,6 +24,7 @@ export default class BrowserController {
     rootLayout = new FlexLayout();
     pageWidget?: QScrollArea;
     urlInput = new QLineEdit();
+    previousButton = new QPushButton();
     constructor(){
         
       
@@ -64,6 +65,10 @@ export default class BrowserController {
       
       this.api = new BrowserApi(this);
       this.htmlRenderer = new HtmlRenderer(this.api);
+      this.previousButton.setText("<");
+      this.previousButton.addEventListener('clicked', async () => {
+        await this.api.loadPreviousPage();
+      });
       const button = new QPushButton();
       button.setText("Go");
       
@@ -75,6 +80,7 @@ export default class BrowserController {
       
       //headerLayout.addWidget(label);
       this.rootLayout.addWidget(headerWidget);
+      headerLayout.addWidget(this.previousButton);
       headerLayout.addWidget(this.urlInput);
       headerLayout.addWidget(button);
       this.win.setCentralWidget(this.centralWidget);

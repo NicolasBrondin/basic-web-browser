@@ -11,6 +11,7 @@ export default class BrowserApi{
     async loadPage(url: string){
         const page = await this.controller.requestHandler.requestUrl(url);
         this.controller.setUrl(page.url);
+        this.controller.requestHandler.getHistory().push(page.url);
         //const test = "<html><head><title>Test</title></head><body><h1>Test</h1><p>Test</p></body></html>";
         const dom = this.controller.htmlParser.parseHtmlDocumentFromText(page.content);
         if(!dom.document) return;
@@ -21,6 +22,15 @@ export default class BrowserApi{
         }
         this.controller.htmlRenderer.render(dom);
       
+    }
+
+    async loadPreviousPage(){
+        const history = this.controller.requestHandler.getHistory();
+        if(history.length > 1){
+            history.pop();
+            const previousPage = history.pop();
+            this.loadPage(previousPage as string);
+        }
     }
 
     getPageWidget(){
