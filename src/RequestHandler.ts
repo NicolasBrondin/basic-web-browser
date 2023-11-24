@@ -4,15 +4,24 @@ import { PageResponse } from "../types/PageResponse";
 const http = require('http');
 
 export class RequestHandler {
-    domain?: string;
-
+    currentPath?: string;
     constructor() {
     }
 
     parseAbsoluteUrl(url: string) : string {
         if(!url)
             throw new Error("Url is null");
-        this.domain = /https?:\/\/([^\/]+)/.exec(url)?.[1];
+        if(this.isUrlAbsolute(url)){
+            this.currentPath = this.getCurrentPathFromUrl(url);
+            return url;
+        } else {
+            if(url.startsWith("/")){
+                return this.getCurrentDomain() + url;
+            } else {
+                return this.currentPath + "/" + url;
+            }
+        }
+        /*this.domain = /https?:\/\/([^\/]+)/.exec(url)?.[1];
         let absoluteLink = url;
         
         if(url.startsWith("/")){
@@ -21,7 +30,25 @@ export class RequestHandler {
             }
             return this.domain + absoluteLink;
         }
-        return absoluteLink;
+        return absoluteLink;*/
+
+    }
+
+    getCurrentDomain(){
+        if(!this.currentPath){
+            return null;
+        }
+        const index = this.currentPath.indexOf("/");
+        return this.currentPath.slice(0, index);
+    }
+
+    getCurrentPathFromUrl(url: string){
+        const index = url.lastIndexOf("/");
+        return url.slice(0, index);
+    }
+
+    isUrlAbsolute(url: string){
+        return url.startsWith("http://") || url.startsWith("https://");
     }
 
     requestUrl(url: string) : Promise<PageResponse>{

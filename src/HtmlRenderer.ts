@@ -1,30 +1,32 @@
-import { FlexLayout, QLabel, QLayout, QWidget } from "@nodegui/nodegui";
+import { FlexLayout, QScrollArea, QWidget } from "@nodegui/nodegui";
 import { DomTree } from "./DomTree";
 import { DomNode } from "./DomNode";
-import { HTMLElement} from "node-html-parser";
+import BrowserApi from "./BrowserApi";
 
 export class HtmlRenderer {
-    rootWidget?: QWidget;
     domTree?: DomTree;
-    constructor(rootWidget: QWidget) {
-        this.rootWidget = rootWidget;
+    browserApi: BrowserApi;
+
+    constructor(browserApi: BrowserApi) {
+        this.browserApi = browserApi;
     }
 
     render(domTree: DomTree) {
         this.domTree = domTree;
-        if(!this.rootWidget || !this.domTree){
+        if(!this.domTree){
             return;
         }
+        this.browserApi.createNewPage();
         console.log("[RENDERER] Render started...");
-        this.renderDomNode(this.rootWidget, this.domTree.document);
+        this.renderDomNode(this.browserApi.getPageWidget() as QScrollArea, this.domTree.document);
     }
 
     renderDomNode(parentWidget: QWidget, node?: DomNode) {
         if(!node){
             return;
         }
-        console.log(`[RENDERER] Rendering node ${(node.element as HTMLElement).tagName}`);
-        const widget = node.render();
+        //console.log(`[RENDERER] Rendering node ${(node.element as HTMLElement).tagName}`);
+        const widget = node.render(this.browserApi);
         if(!widget){
             return;
         }

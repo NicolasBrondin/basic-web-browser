@@ -1,5 +1,6 @@
-import { FlexLayout, QLabel, QWidget } from "@nodegui/nodegui";
+import { FlexLayout, QLabel, QWidget, WidgetEventTypes } from "@nodegui/nodegui";
 import { HTMLElement, Node, TextNode } from "node-html-parser";
+import BrowserApi from "./BrowserApi";
 export class DomNode {
     
     element: Node;
@@ -10,11 +11,24 @@ export class DomNode {
     addChildNode(node: DomNode) {
         this.element.childNodes.push(node.element);
     }
+
+    getTagName(){
+        return (this.element as HTMLElement).tagName?.toLowerCase();
+    }
+
+    getAttribute(key: string){
+        const keys = Object.keys((this.element as HTMLElement).attributes || {});
+        const found = keys.find((k)=> k.toLowerCase() === key.toLowerCase());
+        if(!found){
+            return null;
+        }
+        return (this.element as HTMLElement).attributes[found];
+    }
     
     findNodeByName(name: string) : DomNode | undefined {
         for (const child of this.element.childNodes) {
             const domNode = new DomNode(child as HTMLElement);
-            if((domNode.element as HTMLElement).tagName == name){
+            if(domNode.getTagName() == name){
                 return domNode;
             }
         }
@@ -29,7 +43,8 @@ export class DomNode {
         }
     }
 
-    render(): QWidget{
+    render(browserApi: BrowserApi): QWidget{
+        console.log("[NODE] "+this.getTagName());
         const widget = new QWidget();
         widget.setObjectName("widget");
         const layout = new FlexLayout();
@@ -40,6 +55,23 @@ export class DomNode {
             const label = new QLabel();
             label.setText(this.element.textContent);
             layout.addWidget(label);
+            return widget;
+        }
+        if(this.getTagName() === "a"){
+            
+            widget.setObjectName("a");
+            widget.setStyleSheet(`#a * {
+                color: blue;
+                text-decoration: underline;
+            }`);
+            
+            widget.addEventListener(WidgetEventTypes.MouseButtonRelease, () => {
+               console.log("[DEBUG] LINK CLICKED");
+               console.log((this.element as HTMLElement).attributes);
+               const url = this.getAttribute("href") || "";
+               browserApi.loadPage(url);
+            });
+            return widget;
         }
         /*widget.setStyleSheet(`#widget {
             border: 1px solid red;

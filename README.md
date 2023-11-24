@@ -30,7 +30,7 @@ npm start
 - [x] Make HtmlParser to parse siblings
 - [x] Start rendering elements on the page
 - [x] Parse single elements
-- [ ] Parse elements attributes like "href"
+- [x] Make links clickable
 
 ## License
 
