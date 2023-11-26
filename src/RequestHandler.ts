@@ -2,6 +2,7 @@ import { IncomingMessage } from "http";
 import { PageResponse } from "../types/PageResponse";
 
 const http = require('http');
+const https = require('https');
 
 export class RequestHandler {
     history: string[] = [];
@@ -61,8 +62,8 @@ export class RequestHandler {
 
             const absoluteLink = this.parseAbsoluteUrl(url);
             console.log("[REQUEST]"+absoluteLink);
-
-            http.get(absoluteLink, (res: IncomingMessage) => {
+            const method = url.startsWith("https://") ? https : http;
+            method.get(absoluteLink, (res: IncomingMessage) => {
                 let data = '';
                 res.on('data', (chunk: string) => {
                     data += chunk;

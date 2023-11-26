@@ -31,7 +31,9 @@ npm start
 - [x] Start rendering elements on the page
 - [x] Parse single elements
 - [x] Make links clickable
-- [ ] Previous button
+- [x] Previous button
+- [x] Handle https
+- [ ] Handle 301 redirects
 
 ## License
 
