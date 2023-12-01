@@ -6,4 +6,8 @@ export class DomTree {
         this.document = document;
     }
 
+    toString(){
+        return JSON.stringify(this.document, ["element", "tagName", "childNodes", "attributes"], 2);
+    }
+
 }

@@ -33,7 +33,10 @@ npm start
 - [x] Make links clickable
 - [x] Previous button
 - [x] Handle https
+- [x] Display images
 - [ ] Handle 301 redirects
+- [ ] Fix page scroll
+- [ ] Handle .. and . in urls
 
 ## License
 

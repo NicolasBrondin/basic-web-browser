@@ -28,8 +28,8 @@ export default class BrowserController {
     constructor(){
         
       
-      this.win.setFixedWidth(800);
-      this.win.setFixedHeight(600);
+      this.win.setMinimumWidth(400);
+      this.win.setMinimumHeight(200);
       
       this.centralWidget.setObjectName("myroot");
       this.centralWidget.setLayout(this.rootLayout);
@@ -45,6 +45,7 @@ export default class BrowserController {
         height: '100%';
         width: '100%';
         align-items: 'stretch';
+
       }
       #myheader {
         flex-direction: 'row';
@@ -54,8 +55,16 @@ export default class BrowserController {
         flex: '1';
       }
       #mypage{
-        flex: '1';
         background-color: 'white';
+        border-color: red;
+        border-width: 2px;
+        border-style: solid;
+        overflow: scroll;
+      }
+      #widget{
+        /*border-color: lightgrey;
+        border-width: 1px;
+        border-style: solid;*/
       }
       `);
       /*const label = new QLabel();
@@ -90,11 +99,29 @@ export default class BrowserController {
             height: '100%';
             align-items: 'center';
             justify-content: 'center';
+            flex: '1';
+            height: '100%';
+            width: '100%';
+            align-items: 'stretch';
           }
           #mylabel {
             font-size: 16px;
             font-weight: bold;
             padding: 1;
+          }
+          #myheader {
+            flex-direction: 'row';
+            
+          }
+          #myurlInput{
+            flex: '1';
+          }
+          #mypage{
+            flex: '1';
+            background-color: 'white';
+            
+            height: '100%';
+            width: '100%';
           }
         `
       );
@@ -112,7 +139,8 @@ export default class BrowserController {
     start(){
       this.win.show();
       (global as any).win = this.win;
-      this.urlInput.setText("http://info.cern.ch/hypertext/WWW/TheProject.html");
+      //this.urlInput.setText("http://info.cern.ch/hypertext/WWW/TheProject.html");
+      this.urlInput.setText("https://web.ics.purdue.edu/~gchopra/class/public/pages/webdesign/05_simple.html");
       this.setBrowserTitle("Basic Web Browser");
     }
 }

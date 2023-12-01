@@ -1,6 +1,7 @@
-import { FlexLayout, QLabel, QWidget, WidgetEventTypes } from "@nodegui/nodegui";
+import { FlexLayout, ImageConversionFlag, QImage, QImageFormat, QLabel, QPixmap, QWidget, WidgetEventTypes } from "@nodegui/nodegui";
 import { HTMLElement, Node, TextNode } from "node-html-parser";
 import BrowserApi from "./BrowserApi";
+
 export class DomNode {
     
     element: Node;
@@ -44,7 +45,7 @@ export class DomNode {
     }
 
     render(browserApi: BrowserApi): QWidget{
-        console.log("[NODE] "+this.getTagName());
+        //console.log("[NODE] "+this.getTagName());
         const widget = new QWidget();
         widget.setObjectName("widget");
         const layout = new FlexLayout();
@@ -71,6 +72,30 @@ export class DomNode {
                const url = this.getAttribute("href") || "";
                browserApi.loadPage(url);
             });
+            return widget;
+        } else if(this.getTagName() === "img"){
+            const imageWidget = new QLabel();
+            layout.addWidget(imageWidget);
+            browserApi.loadImage(this.getAttribute("src") as string, (buffer: Buffer)=>{
+                const qImage = new QImage();
+                qImage.loadFromData(buffer);
+                const pixelMap = QPixmap.fromImage(qImage, ImageConversionFlag.AutoColor);
+                imageWidget.setPixmap(pixelMap);
+            });
+            /*request({ method: "GET", uri: this.getAttribute("src") as string }, function (error:any, response:any, body) {
+
+
+                
+                if (!error && response.statusCode == 200) {
+                    //const data = "data:" + response.headers["content-type"] + ";base64," + Buffer.from(body).toString('base64');
+                    console.log("[IMAGE] Loaded" + body);
+                    
+                    
+                } else {
+                    console.error(response?.statusCode, error, response);
+                }
+            });*/
+            
             return widget;
         }
         /*widget.setStyleSheet(`#widget {
