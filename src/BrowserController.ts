@@ -22,51 +22,30 @@ export default class BrowserController {
 
     centralWidget = new QWidget();
     rootLayout = new FlexLayout();
-    pageWidget?: QScrollArea;
+    pageWidget = new QScrollArea();
     urlInput = new QLineEdit();
     previousButton = new QPushButton();
     constructor(){
         
       
-      this.win.setMinimumWidth(400);
-      this.win.setMinimumHeight(200);
+      this.win.setMinimumWidth(600);
+      this.win.setMinimumHeight(400);
+
+      setTimeout(()=>{
+        this.win.setMinimumWidth(0);
+        this.win.setMinimumHeight(0);
+      }, 1000);
       
       this.centralWidget.setObjectName("myroot");
       this.centralWidget.setLayout(this.rootLayout);
       const headerWidget = new QWidget();
+
       headerWidget.setObjectName("myheader");
       const headerLayout = new FlexLayout();
       headerWidget.setLayout(headerLayout);
 
-      this.centralWidget.setStyleSheet(`
-      #myroot {
-        
-        flex: '1';
-        height: '100%';
-        width: '100%';
-        align-items: 'stretch';
+      this.pageWidget.setObjectName("page");
 
-      }
-      #myheader {
-        flex-direction: 'row';
-        
-      }
-      #myurlInput{
-        flex: '1';
-      }
-      #mypage{
-        background-color: 'white';
-        border-color: red;
-        border-width: 2px;
-        border-style: solid;
-        overflow: scroll;
-      }
-      #widget{
-        /*border-color: lightgrey;
-        border-width: 1px;
-        border-style: solid;*/
-      }
-      `);
       /*const label = new QLabel();
       label.setObjectName("mylabel");
       label.setText("Enter a url");*/
@@ -89,42 +68,59 @@ export default class BrowserController {
       
       //headerLayout.addWidget(label);
       this.rootLayout.addWidget(headerWidget);
+      this.rootLayout.addWidget(this.pageWidget)
       headerLayout.addWidget(this.previousButton);
       headerLayout.addWidget(this.urlInput);
       headerLayout.addWidget(button);
       this.win.setCentralWidget(this.centralWidget);
-      this.win.setStyleSheet(
-        `
-          #myroot {
-            height: '100%';
-            align-items: 'center';
-            justify-content: 'center';
-            flex: '1';
-            height: '100%';
-            width: '100%';
-            align-items: 'stretch';
-          }
-          #mylabel {
-            font-size: 16px;
-            font-weight: bold;
-            padding: 1;
-          }
-          #myheader {
-            flex-direction: 'row';
-            
-          }
-          #myurlInput{
-            flex: '1';
-          }
-          #mypage{
-            flex: '1';
-            background-color: 'white';
-            
-            height: '100%';
-            width: '100%';
-          }
-        `
-      );
+      this.win.setStyleSheet(`
+        #myroot {
+          height: '100%';
+          align-items: 'center';
+          justify-content: 'center';
+          flex: '1';
+          height: '100%';
+          width: '100%';
+          align-items: 'stretch';
+        }
+
+        #myheader {
+          flex-direction: 'row';
+          
+        }
+        #myurlInput{
+          flex: '1';
+        }
+
+        #page{
+          background-color: 'white';
+          border-color: red;
+          border-width: 2px;
+          border-style: solid;
+          flex: '1';
+          width: '100%';
+        }
+        
+        #document{
+          background-color: 'white';
+          /*border-color: blue;
+          border-width: 2px;
+          border-style: solid;*/
+        }
+
+        #mylabel {
+          font-size: 16px;
+          font-weight: bold;
+          padding: 1;
+        }
+        #image {
+          /*border: 1px solid yellow;*/
+        }
+        
+        #debug {
+          /*border: 1px solid red;*/
+        }
+      `);
       
     }
 
@@ -142,5 +138,6 @@ export default class BrowserController {
       //this.urlInput.setText("http://info.cern.ch/hypertext/WWW/TheProject.html");
       this.urlInput.setText("https://web.ics.purdue.edu/~gchopra/class/public/pages/webdesign/05_simple.html");
       this.setBrowserTitle("Basic Web Browser");
+      this.api.createNewPage(); //blank
     }
 }

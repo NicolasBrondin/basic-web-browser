@@ -75,12 +75,24 @@ export class DomNode {
             return widget;
         } else if(this.getTagName() === "img"){
             const imageWidget = new QLabel();
+            imageWidget.setObjectName("image");
             layout.addWidget(imageWidget);
             browserApi.loadImage(this.getAttribute("src") as string, (buffer: Buffer)=>{
                 const qImage = new QImage();
                 qImage.loadFromData(buffer);
                 const pixelMap = QPixmap.fromImage(qImage, ImageConversionFlag.AutoColor);
+                widget.setObjectName("debug");
                 imageWidget.setPixmap(pixelMap);
+
+                /*imageWidget.setFixedSize(pixelMap.width(), pixelMap.height()); //[To-Do] : Not working
+                widget.setFixedSize(pixelMap.width(), pixelMap.height()); //[To-Do] : Not working
+                browserApi.getDocumentWidget().adjustSize();*/
+                
+                
+                /*console.log("[DEBUG] Label", imageWidget.width(), imageWidget.height());
+                console.log("[DEBUG] QImage", qImage.width(), qImage.height());
+                console.log("[DEBUG] QPixmap", pixelMap.width(), pixelMap.height());*/
+                //imageWidget.resize(pixelMap.width(), pixelMap.height());
             });
             /*request({ method: "GET", uri: this.getAttribute("src") as string }, function (error:any, response:any, body) {
 
@@ -98,10 +110,7 @@ export class DomNode {
             
             return widget;
         }
-        /*widget.setStyleSheet(`#widget {
-            border: 1px solid red;
-            padding: 5px;
-        }`);*/
+        /*widget.setStyleSheet(``);*/
         /*if(this.attributes.style.display == "none"){
             widget.hide();
         }

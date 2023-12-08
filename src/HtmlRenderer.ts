@@ -18,7 +18,8 @@ export class HtmlRenderer {
         }
         this.browserApi.createNewPage();
         console.log("[RENDERER] Render started...");
-        this.renderDomNode(this.browserApi.getPageWidget() as QScrollArea, this.domTree.document);
+        this.renderDomNode(this.browserApi.getDocumentWidget(), this.domTree.document);
+        this.browserApi.getDocumentWidget().adjustSize();
     }
 
     renderDomNode(parentWidget: QWidget, node?: DomNode) {
@@ -34,6 +35,8 @@ export class HtmlRenderer {
         // Add current to parent widget
         if((parentWidget as any).xLayout){
             (parentWidget as any).xLayout.addWidget(widget);
+        } else {
+            console.log("[DEBUG] Layout missing");
         }
 
         

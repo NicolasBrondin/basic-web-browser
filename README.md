@@ -35,8 +35,10 @@ npm start
 - [x] Handle https
 - [x] Display images
 - [ ] Handle 301 redirects
-- [ ] Fix page scroll
+- [x] Fix page scroll
 - [ ] Handle .. and . in urls
+- [ ] Display images in the right size (and update viewport)
+- [ ] Add tabs
 
 ## License
 

@@ -1,4 +1,4 @@
-import { FlexLayout, QScrollArea } from "@nodegui/nodegui";
+import { FlexLayout, QLabel, QLayout, QScrollArea, QWidget } from "@nodegui/nodegui";
 import BrowserController from "./BrowserController";
 import r from 'request';
 const request = r.defaults({ encoding: null });
@@ -37,22 +37,43 @@ export default class BrowserApi{
         }
     }
 
-    getPageWidget(){
-        return this.controller.pageWidget;
+    getDocumentWidget(){
+        //console.log("[DEBUG] Document: ", (this.controller.pageWidget?.children() as any));
+        return (this.controller.pageWidget as any)?.xWidget as QWidget;
     }
 
     createNewPage(){
-        if(this.controller.pageWidget){
-            this.controller.pageWidget.delete();
-            this.controller.pageWidget = undefined;
+        console.log("[DEBUG] Page - Creating new page...");
+        if(this.getDocumentWidget()){
+            this.getDocumentWidget().delete();
+            (this.controller.pageWidget as any).xWidget = undefined;
         }
-      this.controller.pageWidget = new QScrollArea();
-      this.controller.pageWidget.setObjectName("mypage");
-      const pageLayout = new FlexLayout();
-      this.controller.pageWidget.setLayout(pageLayout);
-      (this.controller.pageWidget as any).xLayout = pageLayout;
-      
-      this.controller.rootLayout.addWidget(this.controller.pageWidget);
+        // Create document (page root child)
+        const documentWidget = new QWidget();
+        const documentLayout = new FlexLayout();
+        documentWidget.setLayout(documentLayout);
+        documentWidget.setObjectName("document");
+        (documentWidget as any).xLayout = documentLayout; // Hack because .getLayout doesn't exist
+
+        // (Re)Create page
+        //this.controller.pageWidget = new QScrollArea(documentWidget);
+        //this.controller.pageWidget.setObjectName("page");
+        //this.controller.rootLayout.addWidget(this.controller.pageWidget);
+        
+        //this.controller.pageWidget.setWidgetResizable(true);
+        //this.controller.pageWidget.setScro
+        this.controller.pageWidget.setWidget(documentWidget);
+        (this.controller.pageWidget as any).xWidget = documentWidget;
+        
+        
+        /*const pageLayout = new FlexLayout();
+        pageLayout.addWidget(documentWidget);
+        (this.controller.pageWidget as any).xLayout = documentWidget;
+        (this.controller.pageWidget as any).setLayout(pageLayout);*/
+        /*const q = new QLabel();
+        q.setText("test");
+        documentLayout.addWidget(q);*/
+
     }
 
     loadImage(url: string, cb: any){
