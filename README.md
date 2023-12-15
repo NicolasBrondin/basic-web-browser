@@ -44,6 +44,7 @@ npm start
 - [x] Render ul
 - [x] Render ol
 - [x] Hide header
+- [x] Hide script/style
 - [ ] Render nested lists
 
 ## License

@@ -72,11 +72,10 @@ export class DomNode {
 
         if(this.getTagName() === "head"){
             widget.hide();
-            //widget.resize(0,0);
-            //layout.setEnabled(false);
-            //childWidget.hide();
-            //childWidget.resize(0,0);
-            widget.setObjectName("debug");
+        }if(this.getTagName() === "script"){
+            widget.hide();
+        }if(this.getTagName() === "style"){
+            widget.hide();
         } else if(this.getTagName() === "a"){
 
             childWidget.setObjectName("a");
