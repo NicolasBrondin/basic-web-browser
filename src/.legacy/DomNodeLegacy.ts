@@ -40,7 +40,7 @@ export class DomNode {
         const widget = new QWidget();
         const layout = new FlexLayout();
         widget.setLayout(layout);
-        (widget as any).xLayout = layout;
+        (widget as any).childLayout = layout;
 
         if(this.value){
             const label = new QLabel();

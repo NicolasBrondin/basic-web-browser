@@ -1,4 +1,4 @@
-import { FlexLayout, QScrollArea, QWidget } from "@nodegui/nodegui";
+import { QWidget } from "@nodegui/nodegui";
 import { DomTree } from "./DomTree";
 import { DomNode } from "./DomNode";
 import BrowserApi from "./BrowserApi";
@@ -33,8 +33,8 @@ export class HtmlRenderer {
         }
 
         // Add current to parent widget
-        if((parentWidget as any).xLayout){
-            (parentWidget as any).xLayout.addWidget(widget);
+        if((parentWidget as any).childLayout){
+            (parentWidget as any).childLayout.addWidget(widget);
         } else {
             console.log("[DEBUG] Layout missing");
         }

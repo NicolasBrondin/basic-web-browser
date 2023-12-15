@@ -46,11 +46,14 @@ export class DomNode {
 
     render(browserApi: BrowserApi): QWidget{
         //console.log("[NODE] "+this.getTagName());
+
+        /* Create Widget */
         const widget = new QWidget();
-        widget.setObjectName("widget");
+        widget.setObjectName("debug");
         const layout = new FlexLayout();
+        widget.setInlineStyle("flex-direction: row;");
+        
         widget.setLayout(layout);
-        (widget as any).xLayout = layout;
 
         if(this.element instanceof TextNode){
             const label = new QLabel();
@@ -58,42 +61,83 @@ export class DomNode {
             layout.addWidget(label);
             return widget;
         }
+
+        let pseudoBefore = new QWidget();
+        const pseudoAfter = new QWidget();
+        pseudoBefore.setObjectName("before");
+        pseudoAfter.setObjectName("after");
+        
+
+        
+        let childWidget : QWidget|QLabel = new QWidget();
+        const childLayout = new FlexLayout();
         if(this.getTagName() === "a"){
-            
-            widget.setObjectName("a");
-            widget.setStyleSheet(`#a * {
+
+            childWidget.setObjectName("a");
+            childWidget.setStyleSheet(`#a * {
                 color: blue;
                 text-decoration: underline;
             }`);
             
-            widget.addEventListener(WidgetEventTypes.MouseButtonRelease, () => {
+            childWidget.addEventListener(WidgetEventTypes.MouseButtonRelease, () => {
                console.log("[DEBUG] LINK CLICKED");
                console.log((this.element as HTMLElement).attributes);
                const url = this.getAttribute("href") || "";
                browserApi.loadPage(url);
             });
-            return widget;
+        } else if(this.getTagName() === "li"){
+            if(this.element.parentNode.tagName.toLowerCase() === "ul"){
+                pseudoBefore.setStyleSheet(`
+                    width: 6px;
+                    height: 6px;
+                    background-color: #000000;
+                    border-radius: 3px;
+                `);
+                pseudoBefore.resize(5,5);
+            } else {
+                pseudoBefore = new QLabel();
+                (pseudoBefore as QLabel).setText("1.");
+            }
+
+        } else if(this.getTagName() === "hr"){
+
+            childWidget.setObjectName("hr");
+            childWidget.setInlineStyle(`
+                border-bottom-color: grey;
+                border-bottom-width: 1px;
+                border-bottom-style: solid;
+                flex: 1;
+            `);
+            //childWidget.setFixedHeight(10);
+            widget.setFixedHeight(1);
+            
         } else if(this.getTagName() === "img"){
-            const imageWidget = new QLabel();
-            imageWidget.setObjectName("image");
-            layout.addWidget(imageWidget);
+            childWidget = new QLabel();
             browserApi.loadImage(this.getAttribute("src") as string, (buffer: Buffer)=>{
+                
+                childWidget.setObjectName("image");
                 const qImage = new QImage();
                 qImage.loadFromData(buffer);
                 const pixelMap = QPixmap.fromImage(qImage, ImageConversionFlag.AutoColor);
                 widget.setObjectName("debug");
-                imageWidget.setPixmap(pixelMap);
+                (childWidget as QLabel).setPixmap(pixelMap);
 
-                /*imageWidget.setFixedSize(pixelMap.width(), pixelMap.height()); //[To-Do] : Not working
-                widget.setFixedSize(pixelMap.width(), pixelMap.height()); //[To-Do] : Not working
-                browserApi.getDocumentWidget().adjustSize();*/
+                
+                childWidget.setInlineStyle("height: 50px;");
+                childWidget.setFixedHeight(50);
+                widget.setFixedHeight(50);
+                
+                //childWidget.setFixedSize(pixelMap.width(), pixelMap.height()); //[To-Do] : Not working
+                //widget.setFixedSize(pixelMap.width(), pixelMap.height()); //[To-Do] : Not working
+                //browserApi.getDocumentWidget().adjustSize();
                 
                 
                 /*console.log("[DEBUG] Label", imageWidget.width(), imageWidget.height());
                 console.log("[DEBUG] QImage", qImage.width(), qImage.height());
                 console.log("[DEBUG] QPixmap", pixelMap.width(), pixelMap.height());*/
-                //imageWidget.resize(pixelMap.width(), pixelMap.height());
+                //childWidget.resize(pixelMap.width(), pixelMap.height());
             });
+            
             /*request({ method: "GET", uri: this.getAttribute("src") as string }, function (error:any, response:any, body) {
 
 
@@ -108,8 +152,19 @@ export class DomNode {
                 }
             });*/
             
-            return widget;
         }
+        
+
+        layout.addWidget(pseudoBefore);
+        layout.addWidget(childWidget);
+        try {
+            childWidget.setLayout(childLayout);
+            //childWidget.setStyleSheet("flex-direction: 'column';");
+        } catch(e){
+            console.warn(e);
+        }
+        (widget as any).childLayout = childLayout;
+
         /*widget.setStyleSheet(``);*/
         /*if(this.attributes.style.display == "none"){
             widget.hide();
@@ -118,7 +173,8 @@ export class DomNode {
             // Doesn't work, still taking space
             widget.setFixedHeight(parseInt(this.attributes.style.height, 10));
         }*/
-
+        
+        layout.addWidget(pseudoAfter);
         return widget;
     }
 }

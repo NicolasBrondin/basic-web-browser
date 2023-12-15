@@ -39,7 +39,28 @@ npm start
 - [ ] Handle .. and . in urls
 - [ ] Display images in the right size (and update viewport)
 - [ ] Add tabs
+- [x] Add pseudo-elements ::before and ::after
+- [x] Render hr
+- [x] Render ul
+- [x] Render ol
+- [ ] Hide header
+- [ ] Render nested lists
 
 ## License
 
 MIT
+
+## Drafts
+
+
+-- Widget -------------------------------------------
+| [ ::before , ChildWidget , ::after ](WidgetLayout) |
+-----------------------------------------------------
+
+vv inside vv
+
+-- ChildWidget -----------
+| [<Empty>](ChildLayout) |
+--------------------------
+
+Widget has a direct reference to ChildLayout

@@ -53,7 +53,7 @@ export default class BrowserApi{
         const documentLayout = new FlexLayout();
         documentWidget.setLayout(documentLayout);
         documentWidget.setObjectName("document");
-        (documentWidget as any).xLayout = documentLayout; // Hack because .getLayout doesn't exist
+        (documentWidget as any).childLayout = documentLayout; // Hack because .getLayout doesn't exist
 
         // (Re)Create page
         //this.controller.pageWidget = new QScrollArea(documentWidget);
