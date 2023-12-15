@@ -116,9 +116,11 @@ export default class BrowserController {
         #image {
           /*border: 1px solid yellow;*/
         }
-        
+        #widget {
+          /*border: 1px solid grey;*/
+        }
         #debug {
-          /*border: 1px solid red;*/
+          border: 1px solid red;
         }
       `);
       

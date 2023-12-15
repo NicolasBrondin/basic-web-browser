@@ -49,7 +49,7 @@ export class DomNode {
 
         /* Create Widget */
         const widget = new QWidget();
-        widget.setObjectName("debug");
+        widget.setObjectName("widget");
         const layout = new FlexLayout();
         widget.setInlineStyle("flex-direction: row;");
         
@@ -57,7 +57,7 @@ export class DomNode {
 
         if(this.element instanceof TextNode){
             const label = new QLabel();
-            label.setText(this.element.textContent);
+            label.setText(this.element.textContent.trim());
             layout.addWidget(label);
             return widget;
         }
@@ -67,11 +67,17 @@ export class DomNode {
         pseudoBefore.setObjectName("before");
         pseudoAfter.setObjectName("after");
         
-
-        
         let childWidget : QWidget|QLabel = new QWidget();
         const childLayout = new FlexLayout();
-        if(this.getTagName() === "a"){
+
+        if(this.getTagName() === "head"){
+            widget.hide();
+            //widget.resize(0,0);
+            //layout.setEnabled(false);
+            //childWidget.hide();
+            //childWidget.resize(0,0);
+            widget.setObjectName("debug");
+        } else if(this.getTagName() === "a"){
 
             childWidget.setObjectName("a");
             childWidget.setStyleSheet(`#a * {
