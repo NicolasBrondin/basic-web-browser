@@ -46,7 +46,7 @@ npm start
 - [x] Hide head
 - [x] Hide script/style
 - [x] Render nested lists
-- [x] Make the <li> for <ol> index dynamic
+- [x] Make the li for ol index dynamic
 - [x] Parse style attribute as object
 
 ## License
