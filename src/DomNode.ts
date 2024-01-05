@@ -100,8 +100,11 @@ export class DomNode {
                 `);
                 pseudoBefore.resize(5,5);
             } else {
+                const itemIndex = this.element.parentNode.childNodes.findIndex((el: Node)=>{
+                    return el == this.element;
+                });
                 pseudoBefore = new QLabel();
-                (pseudoBefore as QLabel).setText("1.");
+                (pseudoBefore as QLabel).setText(itemIndex+".");
             }
 
         } else if(this.getTagName() === "hr"){

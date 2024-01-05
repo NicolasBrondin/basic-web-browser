@@ -45,7 +45,8 @@ npm start
 - [x] Render ol
 - [x] Hide header
 - [x] Hide script/style
-- [ ] Render nested lists
+- [x] Render nested lists
+- [x] Make the <li> for <ol> index dynamic
 
 ## License
 
