@@ -2,12 +2,41 @@ import { FlexLayout, ImageConversionFlag, QImage, QImageFormat, QLabel, QPixmap,
 import { HTMLElement, Node, TextNode } from "node-html-parser";
 import BrowserApi from "./BrowserApi";
 
+type StyleObject = {
+    display?: "none" | "flex" | "block" | "inline-block" | "inline" | "grid" ;
+    "font-size"?: string;
+    color?: string;
+}
+
+
 export class DomNode {
     
     element: Node;
+    style: StyleObject = {};
 
     constructor(el: Node){
         this.element = el;
+        const styleString = this.getAttribute("style");
+        if(styleString){
+            try {
+                //font-size: 32px; color: red;
+                const styleArray = styleString.split(';');
+                this.style = styleArray.reduce((obj: any, cssRule)=>{
+                    cssRule = cssRule.trim();
+                    if(cssRule){
+                        const cssRuleSplitted = cssRule.split(":");
+                        const cssKey = (cssRuleSplitted[0] || "").trim();
+                        const cssValue = (cssRuleSplitted[1] || "").trim();
+                        if(cssKey && cssValue){
+                            obj[cssKey] = cssValue;
+                        }
+                    }
+                    return obj;
+                }, {}) as StyleObject;
+            } catch(e){
+                this.style = {};
+            }
+        }
     }
     addChildNode(node: DomNode) {
         this.element.childNodes.push(node.element);
@@ -17,7 +46,7 @@ export class DomNode {
         return (this.element as HTMLElement).tagName?.toLowerCase();
     }
 
-    getAttribute(key: string){
+    getAttribute(key: string) {
         const keys = Object.keys((this.element as HTMLElement).attributes || {});
         const found = keys.find((k)=> k.toLowerCase() === key.toLowerCase());
         if(!found){
@@ -71,11 +100,15 @@ export class DomNode {
         const childLayout = new FlexLayout();
 
         if(this.getTagName() === "head"){
-            widget.hide();
-        }if(this.getTagName() === "script"){
-            widget.hide();
-        }if(this.getTagName() === "style"){
-            widget.hide();
+            this.style.display = "none";
+        } else if(this.getTagName() === "title"){
+            this.style.display = "none";
+        } else if(this.getTagName() === "script"){
+            this.style.display = "none";
+        } else if(this.getTagName() === "style"){
+            this.style.display = "none";
+        } else if(this.getTagName() === "h1"){
+            this.style["font-size"] = "32px";
         } else if(this.getTagName() === "a"){
 
             childWidget.setObjectName("a");
@@ -87,7 +120,7 @@ export class DomNode {
             childWidget.addEventListener(WidgetEventTypes.MouseButtonRelease, () => {
                console.log("[DEBUG] LINK CLICKED");
                console.log((this.element as HTMLElement).attributes);
-               const url = this.getAttribute("href") || "";
+               const url = this.getAttribute("href") as string || "";
                browserApi.loadPage(url);
             });
         } else if(this.getTagName() === "li"){
@@ -161,7 +194,6 @@ export class DomNode {
             });*/
             
         }
-        
 
         layout.addWidget(pseudoBefore);
         layout.addWidget(childWidget);
@@ -172,17 +204,32 @@ export class DomNode {
             console.warn(e);
         }
         (widget as any).childLayout = childLayout;
-
-        /*widget.setStyleSheet(``);*/
-        /*if(this.attributes.style.display == "none"){
-            widget.hide();
-        }
-        if(this.attributes.style.height){
-            // Doesn't work, still taking space
-            widget.setFixedHeight(parseInt(this.attributes.style.height, 10));
-        }*/
         
+        this.applyStyle(widget, childWidget, pseudoBefore, pseudoAfter);
         layout.addWidget(pseudoAfter);
         return widget;
     }
+
+    applyStyle(globalWidget: QWidget, childWidget: QWidget, pseudoBefore: QWidget, pseudoAfter: QWidget){
+        console.log("[STYLE]", this.style);
+        let childStyleSheet = "";
+        let pseudoBeforeStyleSheet = pseudoBefore.styleSheet();
+        if(this.style.display == "none"){
+            globalWidget.hide();
+        }
+        if(this.style["font-size"]){
+            childStyleSheet +=`font-size: ${this.style["font-size"]};`;
+            //if li
+            pseudoBeforeStyleSheet += `width: ${this.style["font-size"]};height: ${this.style["font-size"]};`;
+
+        }
+        if(this.style["color"]){
+            childStyleSheet +=`color: ${this.style["color"]};`;
+            //if li 
+            pseudoBeforeStyleSheet += `background-color: ${this.style["color"]};`;
+        }
+        childWidget.setStyleSheet(childStyleSheet);
+        pseudoBefore.setStyleSheet(pseudoBeforeStyleSheet);
+    }
+
 }

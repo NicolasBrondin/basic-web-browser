@@ -43,10 +43,11 @@ npm start
 - [x] Render hr
 - [x] Render ul
 - [x] Render ol
-- [x] Hide header
+- [x] Hide head
 - [x] Hide script/style
 - [x] Render nested lists
 - [x] Make the <li> for <ol> index dynamic
+- [x] Parse style attribute as object
 
 ## License
 
