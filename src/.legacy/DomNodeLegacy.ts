@@ -36,7 +36,7 @@ export class DomNode {
         }
     }
 
-    render(): QWidget{
+    generate(): QWidget{
         const widget = new QWidget();
         const layout = new FlexLayout();
         widget.setLayout(layout);

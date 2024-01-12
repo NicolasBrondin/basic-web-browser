@@ -27,7 +27,7 @@ export class HtmlRenderer {
             return;
         }
         //console.log(`[RENDERER] Rendering node ${(node.element as HTMLElement).tagName}`);
-        const widget = node.render(this.browserApi);
+        const widget = node.generate(this.browserApi);
         if(!widget){
             return;
         }

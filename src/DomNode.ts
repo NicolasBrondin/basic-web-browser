@@ -73,7 +73,7 @@ export class DomNode {
         }
     }
 
-    render(browserApi: BrowserApi): QWidget{
+    generate(browserApi: BrowserApi): QWidget{
         //console.log("[NODE] "+this.getTagName());
 
         /* Create Widget */
@@ -205,12 +205,12 @@ export class DomNode {
         }
         (widget as any).childLayout = childLayout;
         
-        this.applyStyle(widget, childWidget, pseudoBefore, pseudoAfter);
+        this.render(widget, childWidget, pseudoBefore, pseudoAfter);
         layout.addWidget(pseudoAfter);
         return widget;
     }
 
-    applyStyle(globalWidget: QWidget, childWidget: QWidget, pseudoBefore: QWidget, pseudoAfter: QWidget){
+    render(globalWidget: QWidget, childWidget: QWidget, pseudoBefore: QWidget, pseudoAfter: QWidget){
         console.log("[STYLE]", this.style);
         let childStyleSheet = "";
         let pseudoBeforeStyleSheet = pseudoBefore.styleSheet();
