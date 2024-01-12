@@ -50,6 +50,7 @@ npm start
 - [x] Render nested lists
 - [x] Make the li for ol index dynamic
 - [x] Parse style attribute as object
+- [x] Default styling for h1-h6
 
 ## License
 

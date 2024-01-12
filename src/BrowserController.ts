@@ -94,9 +94,9 @@ export default class BrowserController {
 
         #page{
           background-color: 'white';
-          border-color: red;
+          /*border-color: red;
           border-width: 2px;
-          border-style: solid;
+          border-style: solid;*/
           flex: '1';
           width: '100%';
         }

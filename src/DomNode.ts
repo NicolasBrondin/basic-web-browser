@@ -5,6 +5,9 @@ import BrowserApi from "./BrowserApi";
 type StyleObject = {
     display?: "none" | "flex" | "block" | "inline-block" | "inline" | "grid" ;
     "font-size"?: string;
+    "font-weight"?: string | number;
+    "margin-bottom"?: string;
+    "margin-top"?: string;
     color?: string;
 }
 
@@ -38,6 +41,7 @@ export class DomNode {
             }
         }
     }
+
     addChildNode(node: DomNode) {
         this.element.childNodes.push(node.element);
     }
@@ -108,7 +112,33 @@ export class DomNode {
         } else if(this.getTagName() === "style"){
             this.style.display = "none";
         } else if(this.getTagName() === "h1"){
-            this.style["font-size"] = "32px";
+            this.style["font-size"] = "30px";
+            this.style["font-weight"] = "bold";
+            this.style["margin-top"] = "20px";
+            this.style["margin-bottom"] = "15px";
+        } else if(this.getTagName() === "h2"){
+            this.style["font-size"] = "26px";
+            this.style["font-weight"] = "bold";
+            this.style["margin-top"] = "20px";
+            this.style["margin-bottom"] = "15px";
+        } else if(this.getTagName() === "h3"){
+            this.style["font-size"] = "22px";
+            this.style["font-weight"] = "bold";
+        } else if(this.getTagName() === "h4"){
+            this.style["font-size"] = "18px";
+            this.style["font-weight"] = "bold";
+            this.style["margin-top"] = "20px";
+            this.style["margin-bottom"] = "15px";
+        } else if(this.getTagName() === "h5"){
+            this.style["font-size"] = "14px";
+            this.style["font-weight"] = "bold";
+            this.style["margin-top"] = "20px";
+            this.style["margin-bottom"] = "15px";
+        } else if(this.getTagName() === "h6"){
+            this.style["font-size"] = "10px";
+            this.style["font-weight"] = "bold";
+            this.style["margin-top"] = "20px";
+            this.style["margin-bottom"] = "15px";
         } else if(this.getTagName() === "a"){
 
             childWidget.setObjectName("a");
@@ -160,7 +190,7 @@ export class DomNode {
                 const qImage = new QImage();
                 qImage.loadFromData(buffer);
                 const pixelMap = QPixmap.fromImage(qImage, ImageConversionFlag.AutoColor);
-                widget.setObjectName("debug");
+                //widget.setObjectName("debug");
                 (childWidget as QLabel).setPixmap(pixelMap);
 
                 
@@ -204,7 +234,6 @@ export class DomNode {
             console.warn(e);
         }
         (widget as any).childLayout = childLayout;
-        
         this.render(widget, childWidget, pseudoBefore, pseudoAfter);
         layout.addWidget(pseudoAfter);
         return widget;
@@ -212,24 +241,49 @@ export class DomNode {
 
     render(globalWidget: QWidget, childWidget: QWidget, pseudoBefore: QWidget, pseudoAfter: QWidget){
         console.log("[STYLE]", this.style);
+        let globalStyleSheet = globalWidget.styleSheet();
         let childStyleSheet = "";
         let pseudoBeforeStyleSheet = pseudoBefore.styleSheet();
         if(this.style.display == "none"){
             globalWidget.hide();
         }
+        /*if(this.style["before::display"] == "none"){
+            console.log("[DEBUG] before display none: ", this.getTagName());
+            pseudoBefore.hide();
+        }
+        if(this.style["after::display"] == "none"){
+            console.log("[DEBUG] after display none: ", this.getTagName());
+            pseudoAfter.hide();
+        }*/
+        if(this.style["font-weight"]){
+            childStyleSheet +=`font-weight: ${this.style["font-weight"]};`;
+        }
         if(this.style["font-size"]){
             childStyleSheet +=`font-size: ${this.style["font-size"]};`;
-            //if li
-            pseudoBeforeStyleSheet += `width: ${this.style["font-size"]};height: ${this.style["font-size"]};`;
-
+            if(this.getTagName() == "li"){
+                pseudoBeforeStyleSheet += `display: block;width: ${this.style["font-size"]};height: ${this.style["font-size"]};`;
+            }
         }
+
+        /* [To-Do] : Doesn't work */
+        /*if(this.style["margin-bottom"]){
+            globalStyleSheet +=`margin-bottom: ${this.style["margin-bottom"]};`;
+            globalWidget.setContentsMargins(0,0, 0, parseInt(this.style["margin-bottom"], 10));
+        }
+        if(this.style["margin-top"]){
+            globalStyleSheet +=`margin-top: ${this.style["margin-top"]};`;
+            globalWidget.setContentsMargins(0,parseInt(this.style["margin-top"], 10), 0, 0);
+        }*/
+
         if(this.style["color"]){
             childStyleSheet +=`color: ${this.style["color"]};`;
-            //if li 
-            pseudoBeforeStyleSheet += `background-color: ${this.style["color"]};`;
+            if(this.getTagName() == "li"){
+                pseudoBeforeStyleSheet += `background-color: ${this.style["color"]};`;
+            }
         }
         childWidget.setStyleSheet(childStyleSheet);
         pseudoBefore.setStyleSheet(pseudoBeforeStyleSheet);
+        globalWidget.setStyleSheet(globalStyleSheet);
     }
 
 }
