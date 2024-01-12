@@ -11,11 +11,28 @@ type StyleObject = {
     color?: string;
 }
 
+type DomRect = {
+    bottom: number
+    height: number;
+    left: number;
+    right: number;
+    top: number;
+    width: number;
+}
+
 
 export class DomNode {
     
     element: Node;
     style: StyleObject = {};
+    boundingClientRect: DomRect = {
+        bottom: 0,
+        height: 0,
+        left: 0,
+        right: 0,
+        top: 0,
+        width: 0
+    };
 
     constructor(el: Node){
         this.element = el;
@@ -76,6 +93,10 @@ export class DomNode {
             }
         }
     }
+
+    updateBoundingClientRect(){
+        //[To-Do]
+    };
 
     generate(browserApi: BrowserApi): QWidget{
         //console.log("[NODE] "+this.getTagName());

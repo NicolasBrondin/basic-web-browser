@@ -1,9 +1,9 @@
 const path = require("path");
 const { CleanWebpackPlugin } = require("clean-webpack-plugin");
-
+console.log("DEBUG", process.env.NODE_ENV);
 module.exports = {
-  mode: process.NODE_ENV || "development",
-  entry: "./src",
+  mode: process.env.NODE_ENV || "development",
+  entry: process.env.NODE_ENV == "test" ? "./src/test" : "./src",
   target: "node",
   output: {
     path: path.resolve(__dirname, "dist"),
