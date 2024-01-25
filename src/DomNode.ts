@@ -9,6 +9,8 @@ type StyleObject = {
     "margin-bottom"?: string;
     "margin-top"?: string;
     color?: string;
+    width?: string;
+    height?: string;
 }
 
 type DomRect = {
@@ -19,7 +21,6 @@ type DomRect = {
     top: number;
     width: number;
 }
-
 
 export class DomNode {
     
@@ -94,8 +95,29 @@ export class DomNode {
         }
     }
 
-    updateBoundingClientRect(){
-        //[To-Do]
+    computeContentSize(parentElement?: DomNode){
+        const maxWidth = parentElement ? parentElement.boundingClientRect.width : 0;
+       
+        if(this.getTagName() === "p"){
+            const characterWidth = 5;
+            const characterHeight = 16;
+            const numberOfCharacters = Math.floor(maxWidth / characterWidth) || 1;
+            const lines = (this.getAttribute("innerText") || "").match(new RegExp(`.{1,${numberOfCharacters}}`, "g"));
+            return { width: maxWidth, height: lines ? lines.length*characterHeight : 0};
+        }
+        
+    }
+
+    updateBoundingClientRect(parentElement: DomNode, previousElement?: DomNode){
+        const contentSize = this.computeContentSize(parentElement);
+        this.boundingClientRect.width = parseFloat(this.style?.width as string) || contentSize?.width || previousElement?.boundingClientRect?.width || 0;
+        // else root, full width initialized
+        this.boundingClientRect.height = parseFloat(this.style?.height as string) || contentSize?.height || 0;
+        
+        if(previousElement){
+            this.boundingClientRect.top = previousElement.boundingClientRect.top + previousElement.boundingClientRect.height + 1;
+        }
+        console.log(this.boundingClientRect);
     };
 
     generate(browserApi: BrowserApi): QWidget{
