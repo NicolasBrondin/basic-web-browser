@@ -1,4 +1,4 @@
-import { FlexLayout, WidgetEventTypes, QMainWindow, QPainter, QWidget, QFontMetrics, QColor } from '@nodegui/nodegui';
+import { FlexLayout, WidgetEventTypes, QMainWindow, QPainter, QWidget, QFontMetrics, QColor, QBrush, BrushStyle, QPen } from '@nodegui/nodegui';
 import { DomNode } from '../DomNode';
 import { Node, HTMLElement } from 'node-html-parser';
 const PNG = require('pngjs').PNG;
@@ -24,8 +24,17 @@ const imageDomNode = new DomNode(imageNode);
 imageDomNode.style.width = "25px";
 imageDomNode.style.height = "25px";
 
+const div = new HTMLElement("div", {});
+const divDomNode = new DomNode(div);
+divDomNode.style.width = "75px";
+divDomNode.style.height = "50px";
+divDomNode.style["background-color"] = "#aaaaaa";
+divDomNode.style["border-color"] = "#000000";
+divDomNode.style["border-width"] = "3px";
+
+
 // Element 3
-const node3 = new HTMLElement("p", {});
+/*const node3 = new HTMLElement("p", {});
 node3.setAttribute("innerText", "lorem ispum doloret sit amet lorem ispum doloret sit amet lorem ispum doloret sit amet lorem ispum doloret sit amet ");
 const domNode3 = new DomNode(node3 as Node);
 
@@ -36,12 +45,12 @@ imageNode4.setAttribute("src", imageSrc4);
 const imageDomNode4 = new DomNode(imageNode4);
 imageDomNode4.style.width = "120px";
 imageDomNode4.style.height = "120px";
-
+*/
 // Fake DOM
 let domRoot = new HTMLElement("body", {});
 let domRootNode = new DomNode(domRoot);
 
-let dom : DomNode[] = [domNode, imageDomNode, domNode3, imageDomNode4];
+let dom : DomNode[] = [domNode, imageDomNode, divDomNode/*domNode3, imageDomNode4*/];
 
 function renderParagraphNode(widget: QWidget, n: DomNode, painter: QPainter){
    const brush = new QColor("black");
@@ -75,11 +84,24 @@ function renderImageNode(widget: QWidget, n: DomNode, painter: QPainter){
    }
 }
 
+function renderContainerNode(widget: QWidget, n: DomNode, painter: QPainter){
+   const fillBrush = new QColor(n.style['background-color'] || "transparent");
+   painter.setPen(fillBrush);
+   painter.fillRect(n.boundingClientRect.left, n.boundingClientRect.top, n.boundingClientRect.width, n.boundingClientRect.height, fillBrush);
+   const borderBrush = new QPen();
+   borderBrush.setColor(new QColor(n.style['border-color'] || "transparent"));
+   borderBrush.setWidth(parseInt(n.style['border-width'] as string));
+   painter.setPen(borderBrush);
+   painter.drawRect(n.boundingClientRect.left, n.boundingClientRect.top, n.boundingClientRect.width, n.boundingClientRect.height);
+}
+
 function render(widget: QWidget, n: DomNode, painter: QPainter){
    if(n.getTagName() === "p"){
       renderParagraphNode(widget, n, painter);
    } else if(n.getTagName() === "img"){
       renderImageNode(widget, n, painter);
+   } else if(n.getTagName() === "div"){
+      renderContainerNode(widget, n, painter);
    }
 }
 

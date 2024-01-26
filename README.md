@@ -36,7 +36,6 @@ npm start
 - [x] Previous button
 - [x] Handle https
 - [x] Display images
-- [ ] Handle 301 redirects
 - [x] Fix page scroll
 - [ ] Handle .. and . in urls
 - [ ] Display images in the right size (and update viewport)
@@ -52,6 +51,17 @@ npm start
 - [x] Parse style attribute as object
 - [x] Default styling for h1-h6
 - [x] Scaffold RenderEngine with QPainter
+- [x] Improved RequestHandler to support (almost) all url shapes (relative/absolute)
+- [x] Fix links colors
+- [ ] Handle 301 redirects
+
+### Renderer roadmap
+
+- [x] Display multiline text
+- [x] Display fixed size images
+- [x] Render containers (rectangles)
+- [ ] Render links (blue and underline)
+- [ ] Render border-radius
 
 ## License
 

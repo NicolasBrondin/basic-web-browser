@@ -11,6 +11,9 @@ type StyleObject = {
     color?: string;
     width?: string;
     height?: string;
+    "background-color"?: string;
+    "border-color"?: string;
+    "border-width"?: string;
 }
 
 type DomRect = {
@@ -110,7 +113,7 @@ export class DomNode {
 
     updateBoundingClientRect(parentElement: DomNode, previousElement?: DomNode){
         const contentSize = this.computeContentSize(parentElement);
-        this.boundingClientRect.width = parseFloat(this.style?.width as string) || contentSize?.width || previousElement?.boundingClientRect?.width || 0;
+        this.boundingClientRect.width = parseFloat(this.style?.width as string) || contentSize?.width || parentElement?.boundingClientRect?.width || 0;
         // else root, full width initialized
         this.boundingClientRect.height = parseFloat(this.style?.height as string) || contentSize?.height || 0;
         
