@@ -30,6 +30,7 @@ type DomRect = {
 export class DomNode {
     
     element: Node;
+    children: DomNode[] = [];
     style: StyleObject = {
         "border-radius": "0"
     };
@@ -71,6 +72,7 @@ export class DomNode {
 
     addChildNode(node: DomNode) {
         this.element.childNodes.push(node.element);
+        this.children.push(node);
     }
 
     getTagName(){
@@ -107,7 +109,7 @@ export class DomNode {
     computeContentSize(parentElement?: DomNode){
         const maxWidth = parentElement ? parentElement.boundingClientRect.width : 0;
        
-        if(this.getTagName() === "p"){
+        if(this.getTagName() === "p" || this.getTagName() === "a"){
             const characterWidth = 5;
             const characterHeight = 16;
             const numberOfCharacters = Math.floor(maxWidth / characterWidth) || 1;
@@ -125,6 +127,8 @@ export class DomNode {
         
         if(previousElement){
             this.boundingClientRect.top = previousElement.boundingClientRect.top + previousElement.boundingClientRect.height + 1;
+        } else {
+            this.boundingClientRect.top = parentElement.boundingClientRect.top;
         }
         console.log(this.boundingClientRect);
     };
