@@ -60,7 +60,7 @@ npm start
 - [x] Display multiline text
 - [x] Display fixed size images
 - [x] Render containers (rectangles)
-- [ ] Render links (blue and underline)
+- [x] Render links (blue and underline)
 - [ ] Render border-radius
 
 ## License

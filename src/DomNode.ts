@@ -14,6 +14,7 @@ type StyleObject = {
     "background-color"?: string;
     "border-color"?: string;
     "border-width"?: string;
+    "text-decoration"?: string;
 }
 
 type DomRect = {
