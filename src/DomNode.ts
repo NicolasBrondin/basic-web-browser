@@ -15,6 +15,7 @@ type StyleObject = {
     "border-color"?: string;
     "border-width"?: string;
     "text-decoration"?: string;
+    "border-radius": string;
 }
 
 type DomRect = {
@@ -29,7 +30,9 @@ type DomRect = {
 export class DomNode {
     
     element: Node;
-    style: StyleObject = {};
+    style: StyleObject = {
+        "border-radius": "0"
+    };
     boundingClientRect: DomRect = {
         bottom: 0,
         height: 0,
@@ -59,7 +62,9 @@ export class DomNode {
                     return obj;
                 }, {}) as StyleObject;
             } catch(e){
-                this.style = {};
+                this.style = {
+                    "border-radius": "0"
+                };
             }
         }
     }
