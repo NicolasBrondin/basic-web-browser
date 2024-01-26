@@ -19,8 +19,8 @@ export default class BrowserApi{
         //const html = `<html><head><title>A very simple webpage</title></head><body> <ul><li style="font-size: 14px; color: red;">Hello World</li></ul> </body></html>`.replace(/\n|\r/gmi, "" );
         const html = page.content.replace(/\n|\r/gmi, "" );
         const dom = this.controller.htmlParser.parseHtmlDocumentFromText(html);
-        console.log("[DEBUG] Raw : ", html);
-        console.log("[DEBUG] Tree: ", dom.toString());
+        //console.log("[DEBUG] Raw : ", html);
+        //console.log("[DEBUG] Tree: ", dom.toString());
         if(!dom.document) return;
         const titleEl = dom.document.findNodeByName("title");
         //console.log("[TITLE] ", titleEl);
@@ -90,7 +90,7 @@ export default class BrowserApi{
                 //console.log("[IMAGE] Loaded" + body);
                 cb(Buffer.from(body));
             } else {
-                console.error(response?.statusCode, error, response);
+                console.error(response?.statusCode, error);
             }
         });
     }

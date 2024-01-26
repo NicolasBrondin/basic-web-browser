@@ -184,15 +184,15 @@ export class DomNode {
             this.style["margin-bottom"] = "15px";
         } else if(this.getTagName() === "a"){
 
-            childWidget.setObjectName("a");
+            /*childWidget.setObjectName("a");
             childWidget.setStyleSheet(`#a * {
                 color: blue;
                 text-decoration: underline;
-            }`);
+            }`);*/
+            this.style.color = "blue";
             
             childWidget.addEventListener(WidgetEventTypes.MouseButtonRelease, () => {
                console.log("[DEBUG] LINK CLICKED");
-               console.log((this.element as HTMLElement).attributes);
                const url = this.getAttribute("href") as string || "";
                browserApi.loadPage(url);
             });
@@ -283,7 +283,7 @@ export class DomNode {
     }
 
     render(globalWidget: QWidget, childWidget: QWidget, pseudoBefore: QWidget, pseudoAfter: QWidget){
-        console.log("[STYLE]", this.style);
+        //console.log("[STYLE]", this.style);
         let globalStyleSheet = globalWidget.styleSheet();
         let childStyleSheet = "";
         let pseudoBeforeStyleSheet = pseudoBefore.styleSheet();

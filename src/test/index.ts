@@ -5,9 +5,9 @@ const PNG = require('pngjs').PNG;
 const parseDataUri = require('parse-data-uri');
 
 const win = new QMainWindow();
-const center = new QWidget();
-const layout = new FlexLayout();
-center.setLayout(layout);
+//const center = new QWidget();
+//const layout = new FlexLayout();
+//center.setLayout(layout);
 win.resize(200, 200);
 
 // Element 1

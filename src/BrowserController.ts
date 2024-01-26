@@ -138,7 +138,8 @@ export default class BrowserController {
       this.win.show();
       (global as any).win = this.win;
       //this.urlInput.setText("http://info.cern.ch/hypertext/WWW/TheProject.html");
-      this.urlInput.setText("https://web.ics.purdue.edu/~gchopra/class/public/pages/webdesign/05_simple.html");
+      //this.urlInput.setText("https://web.ics.purdue.edu/~gchopra/class/public/pages/webdesign/05_simple.html");
+      this.urlInput.setText("https://code-garage.fr");
       this.setBrowserTitle("Basic Web Browser");
       this.api.createNewPage(); //blank
     }

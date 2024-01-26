@@ -15,9 +15,12 @@ export class RequestHandler {
             throw new Error("Url is null");
         if(this.isUrlAbsolute(url)){
             this.currentPath = this.getCurrentPathFromUrl(url);
+            console.log("[DEBUG] Path - ", this.currentPath);
             return url;
         } else {
-            if(url.startsWith("/")){
+            if(url.startsWith("//")){
+                return this.getCurrentDomain() + url.substring(1);
+            } else if(url.startsWith("/")){
                 return this.getCurrentDomain() + url;
             } else {
                 return this.currentPath + "/" + url;
@@ -44,8 +47,13 @@ export class RequestHandler {
         if(!this.currentPath){
             return null;
         }
-        const index = this.currentPath.indexOf("/");
-        return this.currentPath.slice(0, index);
+        const protocol = this.currentPath.slice(0, this.currentPath.indexOf("//") + 2);
+        console.log("[DEBUG] Protocol - ", protocol);
+        const noProtocol = this.currentPath.slice(protocol.length);
+        console.log("[DEBUG] NoProtocol - ", noProtocol);
+        const domain = this.currentPath.slice(0, noProtocol.indexOf("/") > -1 ? (noProtocol.indexOf("/") + protocol.length) : undefined)
+        console.log("[DEBUG] Domain - ", domain);
+        return domain;
     }
 
     getCurrentPathFromUrl(url: string){
@@ -62,7 +70,8 @@ export class RequestHandler {
 
             const absoluteLink = this.parseAbsoluteUrl(url);
             console.log("[REQUEST]"+absoluteLink);
-            const method = url.startsWith("https://") ? https : http;
+            this.currentPath = absoluteLink;
+            const method = absoluteLink.startsWith("https://") ? https : http;
             method.get(absoluteLink, (res: IncomingMessage) => {
                 let data = '';
                 res.on('data', (chunk: string) => {
