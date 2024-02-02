@@ -61,7 +61,8 @@ npm start
 - [x] Display fixed size images
 - [x] Render containers (rectangles)
 - [x] Render links (blue and underline)
-- [x] Render border-radius (improvement needed, check QPainterPath/addRoundedRect/::setFillRule)
+- [x] Render border-radius
+- [ ] Add padding
 
 ## License
 

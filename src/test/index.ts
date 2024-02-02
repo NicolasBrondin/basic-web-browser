@@ -1,4 +1,4 @@
-import { FlexLayout, WidgetEventTypes, QMainWindow, QPainter, QWidget, QFontMetrics, QColor, QBrush, BrushStyle, QPen, QPainterPath, PenStyle } from '@nodegui/nodegui';
+import { FlexLayout, WidgetEventTypes, QMainWindow, QPainter, QWidget, QFontMetrics, QColor, QBrush, BrushStyle, QPen, QPainterPath, PenStyle, SizeMode, FillRule } from '@nodegui/nodegui';
 import { DomNode } from '../DomNode';
 import { Node, HTMLElement } from 'node-html-parser';
 const PNG = require('pngjs').PNG;
@@ -28,10 +28,10 @@ const div = new HTMLElement("div", {});
 const divDomNode = new DomNode(div);
 //divDomNode.style.width = "50px";
 divDomNode.style.height = "50px";
-divDomNode.style["background-color"] = "#aaaaaa";
-divDomNode.style["border-color"] = "#000000";
-divDomNode.style["border-width"] = "3px";
-divDomNode.style["border-radius"] = "20px";
+divDomNode.style["background-color"] = "#FFFFFF";
+divDomNode.style["border-color"] = "#FF0000";
+divDomNode.style["border-width"] = "2px";
+divDomNode.style["border-radius"] = "5px";
 
 
 // Element 3
@@ -98,65 +98,27 @@ function renderImageNode(widget: QWidget, n: DomNode, painter: QPainter){
    }
 }
 
-/* Works
+
 function renderContainerNode(widget: QWidget, n: DomNode, painter: QPainter){
    const fillBrush = new QColor(n.style['background-color'] || "transparent");
-   painter.setPen(fillBrush);
-   painter.fillRect(n.boundingClientRect.left, n.boundingClientRect.top, n.boundingClientRect.width, n.boundingClientRect.height, fillBrush);
+   painter.setBrush(fillBrush);
    const borderBrush = new QPen();
    borderBrush.setColor(new QColor(n.style['border-color'] || "transparent"));
    borderBrush.setWidth(parseInt(n.style['border-width'] as string));
    painter.setPen(borderBrush);
-   painter.drawRect(n.boundingClientRect.left, n.boundingClientRect.top, n.boundingClientRect.width, n.boundingClientRect.height);
-}*/
-
-//[WIP] : Border-radius
-function renderContainerNode(widget: QWidget, n: DomNode, painter: QPainter){
-   const fillBrush = new QColor(n.style['background-color'] || "transparent");
-   painter.setPen(fillBrush);
-   //painter.fillRect(n.boundingClientRect.left, n.boundingClientRect.top, n.boundingClientRect.width, n.boundingClientRect.height, fillBrush);
-   painter.setBrush(new QBrush(fillBrush, BrushStyle.SolidPattern));
-   
-   painter.drawEllipse(
+   const path = new QPainterPath();
+   path.addRoundedRect(
       n.boundingClientRect.left,
       n.boundingClientRect.top,
-      parseInt(n.style['border-radius']) * 2,
-      parseInt(n.style['border-radius']) * 2
+      n.boundingClientRect.width,
+      n.boundingClientRect.height,
+      parseInt(n.style['border-radius'], 10),
+      parseInt(n.style['border-radius'], 10), 
+      SizeMode.AbsoluteSize
    );
-
-   painter.drawEllipse(
-      n.boundingClientRect.left + n.boundingClientRect.width - (parseInt(n.style['border-radius'])*2),
-      n.boundingClientRect.top + n.boundingClientRect.height - (parseInt(n.style['border-radius'])*2),
-      parseInt(n.style['border-radius']) * 2,
-      parseInt(n.style['border-radius']) * 2
-   );
-
-   painter.drawEllipse(
-      n.boundingClientRect.left,
-      n.boundingClientRect.top + n.boundingClientRect.height - (parseInt(n.style['border-radius'])*2),
-      parseInt(n.style['border-radius']) * 2,
-      parseInt(n.style['border-radius']) * 2
-   );
-
-   painter.drawEllipse(
-      n.boundingClientRect.left + n.boundingClientRect.width - (parseInt(n.style['border-radius'])*2),
-      n.boundingClientRect.top,
-      parseInt(n.style['border-radius']) * 2,
-      parseInt(n.style['border-radius']) * 2
-   );
-
-   //painter.drawPath(new QPainterPath().addRoundedRect)
-   
-   painter.fillRect(n.boundingClientRect.left, n.boundingClientRect.top + parseInt(n.style['border-radius']), n.boundingClientRect.width, n.boundingClientRect.height  - (parseInt(n.style['border-radius']) * 2), fillBrush);
-   painter.fillRect(n.boundingClientRect.left + parseInt(n.style['border-radius']), n.boundingClientRect.top , n.boundingClientRect.width  - (parseInt(n.style['border-radius']) * 2), n.boundingClientRect.height, fillBrush);
-   
-  /* const borderBrush = new QPen();
-   borderBrush.setColor(new QColor(n.style['border-color'] || "transparent"));
-   borderBrush.setWidth(parseInt(n.style['border-width'] as string));   
-   painter.setPen(borderBrush);
-   painter.drawRect(n.boundingClientRect.left, n.boundingClientRect.top, n.boundingClientRect.width, n.boundingClientRect.height);
-   */
+   painter.drawPath(path);
 }
+
 
 function render(widget: QWidget, n: DomNode, painter: QPainter){
    if(n.getTagName() === "p" || n.getTagName() === "a"){
@@ -191,6 +153,16 @@ win.addEventListener(WidgetEventTypes.Paint,  () => {
    dom.forEach((el, index)=>{
       render(win, el, painter);
    });
+   //const fillBrush = new QColor("black");
+   //painter.setBrush(new QBrush(fillBrush, BrushStyle.SolidPattern));
+   
+   /*
+   const borderBrush = new QPen();
+   borderBrush.setColor(new QColor("black"));
+   borderBrush.setWidth(3);   
+   painter.setPen(borderBrush);
+*/
+   
    console.log("=======");
    painter.end();
 });
